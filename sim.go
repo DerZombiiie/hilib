@@ -2,8 +2,7 @@ package hilib
 
 import (
 	"encoding/xml"
-	"io"
-	"net/http"
+	"gopkg.in/resty.v1"
 )
 
 //go:generate stringer -type SimState
@@ -50,23 +49,19 @@ func (rs *ResSimStatus) ReqPath() string {
 }
 
 func (rs *ReqSimStatus) Request(c *Config) (r Response, err error) {
-	hr, err := http.Get(c.BaseURL + rs.ReqPath())
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(hr.Body)
+	resp, err := resty.R().
+		Get(c.BaseURL + rs.ReqPath())
 	if err != nil {
 		return nil, err
 	}
 
 	var res ResSimStatus
-	err = xml.Unmarshal(body, &res)
+	err = xml.Unmarshal(resp.Body(), &res)
 	if err != nil {
 		return nil, err
 	}
 
-	res.setRaw(string(body))
+	res.setRaw(string(resp.Body()))
 
 	return &res, nil
 }
@@ -138,23 +133,19 @@ func (rsl *ResSimLock) ReqPath() string {
 }
 
 func (rs *ReqSimLock) Request(c *Config) (r Response, err error) {
-	hr, err := http.Get(c.BaseURL + rs.ReqPath())
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(hr.Body)
+	resp, err := resty.R().
+		Get(c.BaseURL + rs.ReqPath())
 	if err != nil {
 		return nil, err
 	}
 
 	var res ResSimLock
-	err = xml.Unmarshal(body, &res)
+	err = xml.Unmarshal(resp.Body(), &res)
 	if err != nil {
 		return nil, err
 	}
 
-	res.setRaw(string(body))
+	res.setRaw(string(resp.Body()))
 
 	return &res, nil
 }

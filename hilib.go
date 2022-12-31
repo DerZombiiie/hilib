@@ -1,9 +1,11 @@
 package hilib
 
 import (
+	"fmt"
 	"io"
 )
 
+// Config contains the configuration for requests
 type Config struct {
 	BaseURL string // e.g. "http://192.168.8.1/"
 }
@@ -60,4 +62,36 @@ func (b Bool) Map(t, f string) string {
 
 func (b Bool) Bool() bool {
 	return b == 1
+}
+
+type ResString struct {
+	raw string `xml:"-"`
+
+	Response string `xml:"response"`
+}
+
+func (rs *ResString) setRaw(str string) {
+	rs.raw = str
+}
+
+func (rs *ResString) Raw() string {
+	return rs.raw
+}
+
+var DefaultConfig = &Config{
+	BaseURL: "http://192.168.8.1/",
+}
+
+func GetToken(cnf *Config) (token int, err error) {
+	r, err := (&ReqToken{}).Request(cnf)
+	if err != nil {
+		return
+	}
+
+	res, ok := r.(*ResToken)
+	if !ok {
+		return 0, fmt.Errorf("Token: Casting error!")
+	}
+
+	return res.Token, nil
 }

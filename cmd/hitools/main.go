@@ -43,11 +43,9 @@ func main() {
 
 	cmd := strings.ToLower(os.Args[1])
 	if len(os.Args) >= 2 {
-		if len(os.Args) < 3 {
-			os.Args = append(os.Args[0:1], os.Args[2:]...)
-		} else {
-			os.Args = append(os.Args[0:1], os.Args[3:]...)
-		}
+		cmd = strings.ToLower(os.Args[1])
+
+		os.Args = append(os.Args[0:1], os.Args[2:]...)
 	} else {
 		os.Args = []string{os.Args[0]}
 	}
@@ -77,6 +75,10 @@ func request(r hilib.Request) hilib.Response {
 	}
 	res, err := r.Request(config)
 	if err != nil {
+		if *mode == "verbose" {
+			fmt.Printf("raw:\n%s\n", res.Raw())
+		}
+
 		fmt.Fprintf(os.Stderr, "Error during Request: %s\n", err)
 		os.Exit(-1)
 	}

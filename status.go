@@ -3,8 +3,7 @@ package hilib
 import (
 	"encoding/xml"
 	"fmt"
-	"io"
-	"net/http"
+	"gopkg.in/resty.v1"
 )
 
 type ConnStatus int
@@ -107,23 +106,16 @@ func (rs *ResStatus) ReqPath() string {
 }
 
 func (rs *ReqStatus) Request(c *Config) (r Response, err error) {
-	hr, err := http.Get(c.BaseURL + rs.ReqPath())
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(hr.Body)
-	if err != nil {
-		return nil, err
-	}
+	resp, err := resty.R().
+		Get(c.BaseURL + rs.ReqPath())
 
 	var res ResStatus
-	err = xml.Unmarshal(body, &res)
+	err = xml.Unmarshal(resp.Body(), &res)
 	if err != nil {
 		return nil, err
 	}
 
-	res.setRaw(string(body))
+	res.setRaw(string(resp.Body()))
 
 	return &res, nil
 }

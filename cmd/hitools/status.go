@@ -97,7 +97,7 @@ func t(a, b string) string {
 }
 
 func helpStatus() {
-	fmt.Fprintf(os.Stderr, "Usage: HiTools status [COMMAND] arguments\nwhere COMMAND := {%s}", listStatusCommands())
+	fmt.Fprintf(os.Stderr, "Usage: HiTools status [COMMAND] arguments\nwhere COMMAND := {%s}\n", listStatusCommands())
 
 	os.Exit(-1)
 }
