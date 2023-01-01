@@ -14,6 +14,7 @@ var (
 	basePath = flag.String("base-path", "http://192.168.8.1/", "Base url for http-api")
 	mode     = flag.String("mode", "normal", "Set mode, can be script, normal, verbose and raw")
 	field    = flag.String("field", "", "Only works with in script mode")
+	hi       = flag.Bool("hi", false, "Prints \"hi\" and quit")
 )
 
 var (
@@ -37,6 +38,12 @@ func listCommands() string {
 }
 
 func main() {
+	flag.Parse()
+	if *hi {
+		fmt.Println("hi")
+		os.Exit(0)
+	}
+
 	if len(os.Args) < 2 {
 		help()
 	}
@@ -51,6 +58,11 @@ func main() {
 	}
 
 	flag.Parse()
+
+	if *hi {
+		fmt.Println("hi")
+		os.Exit(0)
+	}
 
 	// check mode
 	_, ok := map[string]struct{}{"script": {}, "normal": {}, "verbose": {}, "raw": {}}[*mode]
