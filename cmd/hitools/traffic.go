@@ -66,8 +66,10 @@ func init() {
 		} else {
 			specialPrint(status)
 
-			fmt.Printf("Total Upload:   %s\n", hilib.ByteCountIEC(status.TotalUpload))
-			fmt.Printf("Total Download: %s\n", hilib.ByteCountIEC(status.TotalDownload))
+			fmt.Printf("Total Upload:     %s\n", hilib.ByteCountIEC(status.TotalUpload))
+			fmt.Printf("Current Upload:   %s\n", hilib.ByteCountIEC(status.CurrentUpload))
+			fmt.Printf("Total Download:   %s\n", hilib.ByteCountIEC(status.TotalDownload))
+			fmt.Printf("Current Download: %s\n", hilib.ByteCountIEC(status.CurrentDownload))
 		}
 	}
 
